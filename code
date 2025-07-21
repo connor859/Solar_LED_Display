@@ -1,0 +1,98 @@
+int red = 3;
+int green = 5;
+int blue = 6; 
+int red2 = 9; 
+int green2 = 10;
+int blue2 = 11; 
+int photo = A0;
+int led = 7;
+int led2 = 8;
+int led3 = 2; 
+int sensor;
+int threshold = 20;
+int button = 12;
+int button2 = 13;
+int buttonstate;
+int buttonstate2;
+
+void setup() {
+  pinMode(red, OUTPUT);
+  pinMode(green, OUTPUT);
+  pinMode(blue, OUTPUT);
+  pinMode(red2, OUTPUT);
+  pinMode(green2, OUTPUT);
+  pinMode(blue2, OUTPUT);
+  pinMode(led, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(led3, OUTPUT);
+  pinMode(button, INPUT_PULLUP);
+  pinMode(button2, INPUT_PULLUP);
+  Serial.begin(9600);
+  
+}
+
+void loop() {
+  sensor = analogRead(photo);
+  buttonstate = digitalRead(button);
+  buttonstate2 = digitalRead(button2);
+
+  Serial.println(sensor);
+ if(sensor < threshold){
+  runRGBAnimation();
+  runLEDAnimation();
+ }
+ else if(buttonstate == LOW){
+  runLEDAnimation();
+ }
+ else if (buttonstate2 == LOW){
+  runRGBAnimation();
+ }
+ else {
+  resetAll();
+ }
+}
+void runRGBAnimation(){
+  for(int i = 0; i <= 255; i++)
+{
+analogWrite(red, i*i/2);
+analogWrite(green, i/2);
+analogWrite(blue, 255 - i/2);
+analogWrite(red2, i*i);
+analogWrite(green2, i/2);
+analogWrite(blue2, 255 - i/2);
+delay(30);
+}
+for(int i = 255; i >= 0; i--){
+analogWrite(red, i*i/2);
+analogWrite(green, i/2);
+analogWrite(blue, 255 - i);
+analogWrite(red2, i*i/2);
+analogWrite(green2, i/2);
+analogWrite(blue2, 255 - i);
+delay(30);
+ }
+
+}
+void runLEDAnimation(){
+  digitalWrite(led, HIGH);
+delay(500);
+digitalWrite(led2, HIGH);
+delay(500);
+digitalWrite(led3, HIGH);
+delay(500);
+digitalWrite(led, LOW);
+delay(500);
+digitalWrite(led2, LOW);
+delay(500);
+digitalWrite(led3, LOW);
+delay(500);
+}
+void resetAll(){
+  analogWrite(red, 0);
+  analogWrite(red2, 0);
+  analogWrite(green, 0);
+  analogWrite(green2, 0);
+  analogWrite(blue, 0);
+  analogWrite(blue2, 0);
+}
+
